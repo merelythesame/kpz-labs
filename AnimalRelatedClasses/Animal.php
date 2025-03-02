@@ -3,8 +3,8 @@
 namespace AnimalRelatedClasses;
 
 abstract class Animal {
-    protected $name;
-    protected $species;
+    protected string $name;
+    protected string $species;
 
     function __construct($name, $species) {
         $this->name = $name;
