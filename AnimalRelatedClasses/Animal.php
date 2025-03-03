@@ -2,11 +2,13 @@
 
 namespace AnimalRelatedClasses;
 
-abstract class Animal {
+abstract class Animal
+{
     protected string $name;
     protected string $species;
 
-    function __construct($name, $species) {
+    function __construct($name, $species)
+    {
         $this->name = $name;
         $this->species = $species;
     }

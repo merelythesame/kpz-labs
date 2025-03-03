@@ -1,4 +1,5 @@
 <?php
+
 namespace AnimalRelatedClasses;
 
 interface ISwimable

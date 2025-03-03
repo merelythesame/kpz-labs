@@ -2,6 +2,7 @@
 
 namespace EmployeeRelatedClasses;
 
-interface IJob{
+interface IJob
+{
     public function work(): string;
 }
