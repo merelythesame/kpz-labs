@@ -4,12 +4,23 @@ namespace EmployeeRelatedClasses;
 
 class Employee
 {
-    protected string $name;
+    public string $name {
+        get => $this->name;
+    }
     protected string $lastname;
     protected int $age;
-    protected float $salary;
+    public float $salary {
+        get => $this->salary;
+        set => $this->salary = $value;
+    }
 
-    protected IJob $position;
+    public IJob $position {
+        get => $this->position;
+
+        set(IJob $value) {
+            $this->position = $value;
+        }
+    }
 
     public function __construct(string $name, string $lastname, int $age, float $salary, IJob $position)
     {
