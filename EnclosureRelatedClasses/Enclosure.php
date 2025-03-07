@@ -4,9 +4,9 @@ namespace EnclosureRelatedClasses;
 
 abstract class Enclosure
 {
-    protected string $name;
-    protected string $area;
-    protected array $animals = [];
+    public string $name;
+    public string $area;
+    public array $animals = [];
 
     public function __construct(string $name, string $area){
         $this->name = $name;
