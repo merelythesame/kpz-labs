@@ -16,8 +16,7 @@ class AnimalManager
         $this->repository->add($animal);
     }
 
-    public function findAnimalByName(string $name): object
-    {
+    public function findAnimalByName(string $name): ?Animal {
         return $this->repository->findByName($name);
     }
 

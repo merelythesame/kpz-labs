@@ -8,6 +8,6 @@ class SavannaEnclosure extends Enclosure
 
     public function description(): string
     {
-        return "A large open enclosure {$this->area} large for animals like lions and giraffes.";
+        return "{$this->name} {$this->area} for memals and birds .";
     }
 }
