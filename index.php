@@ -6,6 +6,7 @@ use AbstractFactory\XiaomiFactory;
 use FactoryMethod\ManagerCall;
 use FactoryMethod\MobileApp;
 use FactoryMethod\WebSite;
+use Singleton\Authenticator;
 
 require_once 'autoloader.php';
 
@@ -43,3 +44,19 @@ echo '<br>';
 $miLaptop = $xiaomiFactory->createLaptop();
 echo $miLaptop->getInfo();
 
+echo "<h1>Singleton</h1><br>";
+
+$auth1 = Authenticator::getInstance();
+$auth2 = Authenticator::getInstance();
+
+if ($auth1->authenticate("admin", "password")) {
+    echo "Authentication successful!<br>";
+} else {
+    echo "Authentication failed.<br>";
+}
+
+if ($auth1 === $auth2) {
+    echo "Same instance<br>";
+} else {
+    echo "Different instances<br>";
+}
