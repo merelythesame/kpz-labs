@@ -6,6 +6,7 @@ use AbstractFactory\XiaomiFactory;
 use FactoryMethod\ManagerCall;
 use FactoryMethod\MobileApp;
 use FactoryMethod\WebSite;
+use Prototype\Virus;
 use Singleton\Authenticator;
 
 require_once 'autoloader.php';
@@ -60,3 +61,18 @@ if ($auth1 === $auth2) {
 } else {
     echo "Different instances<br>";
 }
+
+echo "<h1>Prototype</h1><br>";
+
+$parent = new Virus(2, 0.5, 'alpha', 'Corona');
+
+$chld1 = new Virus(1, 0.4, 'gamma', 'Corona');
+$chld2 = new Virus(0.5, 0.3, 'omicron', 'Corona');
+
+$parent->addChild($chld1);
+$parent->addChild($chld2);
+
+$parent2 = clone $parent;
+echo $parent . "<br>";
+echo $parent2;
+
