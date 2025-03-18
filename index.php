@@ -1,8 +1,10 @@
 <?php
 
 use AbstractFactory\AppleFactory;
-use AbstractFactory\ConcreteDevices\XiaomiLaptop;
 use AbstractFactory\XiaomiFactory;
+use Builder\Director;
+use Builder\EnemyBuilder;
+use Builder\HeroBuilder;
 use FactoryMethod\ManagerCall;
 use FactoryMethod\MobileApp;
 use FactoryMethod\WebSite;
@@ -76,3 +78,16 @@ $parent2 = clone $parent;
 echo $parent . "<br>";
 echo $parent2;
 
+
+echo "<h1>Builder</h1><br>";
+
+$director = new Director();
+
+$heroBuilder = new HeroBuilder();
+$enemyBuilder = new EnemyBuilder();
+
+$director->makeHero($heroBuilder);
+$director->makeEnemy($enemyBuilder);
+
+echo "{$heroBuilder->getResult()}<br>";
+echo "{$enemyBuilder->getResult()}<br>";
