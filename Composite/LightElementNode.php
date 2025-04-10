@@ -3,16 +3,12 @@
 namespace Composite;
 
 class LightElementNode extends LightNode {
-    private string $tagName;
-    private string $displayType;
-    private string $closingType;
+    private MetaDataFlyweight $flyweight;
     private array $cssClasses = [];
     private array $children = [];
 
     public function __construct(string $tagName, string $displayType = 'block', string $closingType = 'pair') {
-        $this->tagName = $tagName;
-        $this->displayType = $displayType;
-        $this->closingType = $closingType;
+        $this->flyweight = MetaDataFlyweightFactory::getFlyweight($tagName, $displayType, $closingType);
     }
 
     public function addClass(string $className): void {
@@ -32,21 +28,19 @@ class LightElementNode extends LightNode {
     }
 
     public function getOuterHTML(): string {
+        $tagName = $this->flyweight->tagName;
+        $closingType = $this->flyweight->closingType;
+
         $classAttr = empty($this->cssClasses) ? '' : ' class="' . implode(' ', $this->cssClasses) . '"';
 
-        if ($this->closingType === 'single') {
-            return "<{$this->tagName}{$classAttr} />";
+        if ($closingType === 'single') {
+            return "<{$tagName}{$classAttr} />";
         }
 
-        return "<{$this->tagName}{$classAttr}>" . $this->getInnerHTML() . "</{$this->tagName}>";
+        return "<{$tagName}{$classAttr}>" . $this->getInnerHTML() . "</{$tagName}>";
     }
 
     public function getChildrenCount(): int {
         return count($this->children);
-    }
-
-    public function getDisplayType(): string
-    {
-        return $this->displayType;
     }
 }

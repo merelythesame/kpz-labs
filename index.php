@@ -11,6 +11,7 @@ use Bridge\Triangle;
 use Bridge\Vector;
 use Composite\LightElementNode;
 use Composite\LightTextNode;
+use Composite\MetaDataFlyweightFactory;
 use Decorator\Items\BootsOfSpeed;
 use Decorator\Items\FireSword;
 use Decorator\Items\HealingPotion;
@@ -20,6 +21,8 @@ use Decorator\Paladin;
 use Decorator\Warrior;
 use Proxy\SmartTextCheckerProxy;
 use Proxy\SmartTextReaderLocker;
+
+echo "<h2>Adapter</h2>";
 
 $logger = new Logger();
 $logger->log("Це звичайне повідомлення");
@@ -34,7 +37,7 @@ $fileLogger->log("Це звичайне повідомлення у файлі")
 $fileLogger->error("Це помилка у файлі");
 $fileLogger->warn("Це попередження у файлі");
 
-echo "\nDecorator\n";
+echo "\n<h2>Decorator\n</h2>";
 
 
 $hero1 = new Warrior('Omniman', 2000, 1500, 900);
@@ -58,7 +61,7 @@ echo $hero2->getDescription() . "<br><br>";
 echo $hero3->getDescription() . "<br><br>";
 
 
-echo "<br>Bridge<br>";
+echo "<br><h2>Bridge</h2><br>";
 
 $raster = new Raster();
 $vector = new Vector();
@@ -71,7 +74,7 @@ echo $circle->draw() . "<br><br>";
 echo $square->draw() . "<br><br>";
 echo $triangle->draw() . "<br><br>";
 
-echo "<br>Proxy<br>";
+echo "<br><h2>Proxy</h2><br>";
 
 $path = 'Proxy/example.txt';
 
@@ -91,7 +94,7 @@ $allowOnlyTmp = new SmartTextReaderLocker($path, '/\.tmp$/');
 
 print_r($allowOnlyTmp->readTo2DArray());
 
-echo '<br>Composite<br>';
+echo '<br><h2>Composite</h2><br>';
 
 $ul = new LightElementNode('ul');
 $ul->addClass('my-list');
@@ -114,3 +117,48 @@ echo $ul->getOuterHTML();
 
 echo "\n\n INNER HTML \n";
 echo $ul->getInnerHTML();
+
+
+function convertTextToLightHTML(string $text): LightElementNode {
+    $lines = explode("\n", $text);
+    $container = new LightElementNode('div');
+
+    foreach ($lines as $index => $line) {
+        if (trim($line) === '') continue;
+
+        if ($index === 0) {
+            $el = new LightElementNode('h1');
+        }
+        elseif (preg_match('/^\s/', $line)) {
+            $el = new LightElementNode('blockquote');
+        }
+        elseif (strlen(trim($line)) < 20) {
+            $el = new LightElementNode('h2');
+        }
+        else {
+            $el = new LightElementNode('p');
+        }
+
+        $el->addChild(new LightTextNode($line));
+        $container->addChild($el);
+    }
+
+
+    return $container;
+}
+
+
+$bookText = file_get_contents('Composite/book.txt');
+
+$startMemory = memory_get_usage();
+
+$lightHTML = convertTextToLightHTML($bookText);
+$output =  $lightHTML->getOuterHTML();
+
+$endMemory = memory_get_usage();
+
+echo "\n\nВикористано памʼяті: " . round(($endMemory - $startMemory) / 1024) .  " KB";
+echo "\nУнікальних flyweight обʼєктів: " . MetaDataFlyweightFactory::getCount() . "\n";
+
+echo $output;
+
