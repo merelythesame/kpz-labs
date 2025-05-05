@@ -148,17 +148,19 @@ function convertTextToLightHTML(string $text): LightElementNode {
 }
 
 
-$bookText = file_get_contents('Composite/book.txt');
+//$bookText = file_get_contents('Composite/book.txt');
+//
+//$startMemory = memory_get_usage();
+//
+//$lightHTML = convertTextToLightHTML($bookText);
+//$output =  $lightHTML->getOuterHTML();
+//
+//$endMemory = memory_get_usage();
+//
+//echo "\n\nВикористано памʼяті: " . round(($endMemory - $startMemory) / 1024) .  " KB";
+//echo "\nУнікальних flyweight обʼєктів: " . MetaDataFlyweightFactory::getCount() . "\n";
+//
+//echo $output;
 
-$startMemory = memory_get_usage();
-
-$lightHTML = convertTextToLightHTML($bookText);
-$output =  $lightHTML->getOuterHTML();
-
-$endMemory = memory_get_usage();
-
-echo "\n\nВикористано памʼяті: " . round(($endMemory - $startMemory) / 1024) .  " KB";
-echo "\nУнікальних flyweight обʼєктів: " . MetaDataFlyweightFactory::getCount() . "\n";
-
-echo $output;
+require_once "lighthtml.php";
 
