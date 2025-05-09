@@ -1,5 +1,6 @@
 <?php
 
+use Composite\Command\ClearContentCommand;
 use Composite\LightElementNode;
 use Composite\LightTextNode;
 use Composite\State\CollapsedState;
@@ -64,3 +65,26 @@ echo "Nodes per depth level:" . "<br>";
 foreach ($visitor->getDepthCounts() as $depth => $count) {
     echo "Depth $depth: $count node(s)" . "<br>";
 }
+
+echo "<h2>Command</h2>";
+
+$div = new LightElementNode('div');
+$p = new LightElementNode('p');
+$p->addChild(new LightTextNode('Old text'));
+$div->addChild($p);
+
+$button = new LightElementNode('button');
+$button->addChild(new LightTextNode('Clear Content'));
+
+$clearCommand = new ClearContentCommand($div);
+$button->setCommand($clearCommand);
+
+echo "First:" . htmlspecialchars($div->getOuterHTML()) . "<br>";
+
+$button->executeCommand();
+
+echo "Clean:" . htmlspecialchars($div->getOuterHTML()) . "<br>";
+
+$button->executeCommand();
+
+echo "Undone:" . htmlspecialchars($div->getOuterHTML()) . "<br>";
