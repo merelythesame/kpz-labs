@@ -1,6 +1,7 @@
 <?php
 
 namespace Composite;
+use Composite\Visitor\NodeVisitorInterface;
 
 class LightTextNode extends LightNode {
     private string $text;
@@ -15,5 +16,9 @@ class LightTextNode extends LightNode {
 
     public function getInnerHTML(): string {
         return $this->getOuterHTML();
+    }
+
+    public function accept(NodeVisitorInterface $visitor, int $depth = 1): void {
+        $visitor->visitTextNode($this);
     }
 }
