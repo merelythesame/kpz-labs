@@ -4,8 +4,7 @@ namespace Composite;
 
 use Composite\State\VisibilityStateInterface;
 use Composite\State\VisibleState;
-use Composite\Template\MarkDownSerializer;
-use Composite\Template\Serializer;
+use Composite\Visitor\NodeVisitorInterface;
 
 class LightElementNode extends LightNode {
     private MetaDataFlyweight $flyweight;
@@ -53,6 +52,10 @@ class LightElementNode extends LightNode {
             $html .= $child->getOuterHTML();
         }
         return $html;
+    }
+
+    public function accept(NodeVisitorInterface $visitor, int $depth = 1): void {
+        $visitor->visitElementNode($this, $depth);
     }
 
     public function setState(VisibilityStateInterface $state): void
