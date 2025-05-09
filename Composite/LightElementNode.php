@@ -2,6 +2,8 @@
 
 namespace Composite;
 
+use Composite\Command\ClearContentCommand;
+use Composite\Command\CommandInterface;
 use Composite\State\VisibilityStateInterface;
 use Composite\State\VisibleState;
 use Composite\Visitor\NodeVisitorInterface;
@@ -11,6 +13,8 @@ class LightElementNode extends LightNode {
     private array $cssClasses = [];
     private array $children = [];
     private VisibilityStateInterface $state;
+    private CommandInterface $command;
+
     public function __construct(string $tagName, string $displayType = 'block', string $closingType = 'pair') {
         $this->flyweight = MetaDataFlyweightFactory::getFlyweight($tagName, $displayType, $closingType);
         $this->state = new VisibleState();
@@ -27,6 +31,15 @@ class LightElementNode extends LightNode {
 
     public function addChild(LightNode $child): void {
         $this->children[] = $child;
+    }
+
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    public function clearChildren(): void {
+        $this->children = [];
     }
 
     public function getOuterHTML(): string {
@@ -63,8 +76,22 @@ class LightElementNode extends LightNode {
         $this->state = $state;
     }
 
-    public function getChildren(): array
+    public function setCommand(CommandInterface $command): void
     {
-        return $this->children;
+        $this->command = $command;
+    }
+
+    public function executeCommand(): void
+    {
+        if ($this->command instanceof ClearContentCommand) {
+            if ($this->command->isExecuted()) {
+                $this->command->undo();
+            } else {
+                $this->command->execute();
+            }
+        } else {
+            $this->command?->execute();
+        }
+
     }
 }
