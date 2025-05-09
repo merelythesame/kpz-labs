@@ -1,6 +1,8 @@
 <?php
 
 use Composite\Command\ClearContentCommand;
+use Composite\Iterator\BreadthFirstIterator;
+use Composite\Iterator\DepthFirstIterator;
 use Composite\LightElementNode;
 use Composite\LightTextNode;
 use Composite\State\CollapsedState;
@@ -88,3 +90,32 @@ echo "Clean:" . htmlspecialchars($div->getOuterHTML()) . "<br>";
 $button->executeCommand();
 
 echo "Undone:" . htmlspecialchars($div->getOuterHTML()) . "<br>";
+
+echo "<h2>Iterator</h2>";
+
+$div = new LightElementNode('div');
+$section = new LightElementNode('section');
+$p = new LightElementNode('p');
+$p->addChild(new LightTextNode('Hello'));
+$section->addChild($p);
+$div->addChild($section);
+
+echo "<strong>DFS:</strong><br>";
+foreach (new DepthFirstIterator($div) as $node) {
+    if ($node instanceof LightElementNode) {
+        echo htmlspecialchars($node->getOuterHTML()) . "<br>";
+        echo "Tag: " . $node->getFlyweight()->tagName . "<br>";
+    } elseif ($node instanceof LightTextNode) {
+        echo "Text: " . htmlspecialchars($node->getOuterHTML()) . "<br>";
+    }
+}
+
+echo "<br><strong>BFS:</strong><br>";
+foreach (new BreadthFirstIterator($div) as $node) {
+    if ($node instanceof LightElementNode) {
+        echo htmlspecialchars($node->getOuterHTML()) . "<br>";
+        echo "Tag: " . $node->getFlyweight()->tagName . "<br>";
+    } elseif ($node instanceof LightTextNode) {
+        echo "Text: " . htmlspecialchars($node->getOuterHTML()) . "<br>";
+    }
+}
