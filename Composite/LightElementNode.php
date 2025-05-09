@@ -4,13 +4,14 @@ namespace Composite;
 
 use Composite\State\VisibilityStateInterface;
 use Composite\State\VisibleState;
+use Composite\Template\MarkDownSerializer;
+use Composite\Template\Serializer;
 
 class LightElementNode extends LightNode {
     private MetaDataFlyweight $flyweight;
     private array $cssClasses = [];
     private array $children = [];
     private VisibilityStateInterface $state;
-
     public function __construct(string $tagName, string $displayType = 'block', string $closingType = 'pair') {
         $this->flyweight = MetaDataFlyweightFactory::getFlyweight($tagName, $displayType, $closingType);
         $this->state = new VisibleState();
@@ -57,5 +58,10 @@ class LightElementNode extends LightNode {
     public function setState(VisibilityStateInterface $state): void
     {
         $this->state = $state;
+    }
+
+    public function getChildren(): array
+    {
+        return $this->children;
     }
 }
